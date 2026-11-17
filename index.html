@@ -1,0 +1,644 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Save the Date - 70 ans de Grégoire !</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: #fdfbf7;
+            color: #2c2523;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+        }
+
+        .container {
+            max-width: 620px;
+            width: 100%;
+            background: #ffffff;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+            padding: 24px;
+            text-align: center;
+            box-sizing: border-box;
+        }
+
+        .badge {
+            display: inline-block;
+            background-color: #fde8e3;
+            color: #c2593f;
+            font-weight: 700;
+            padding: 6px 16px;
+            border-radius: 50px;
+            font-size: 13px;
+            margin-bottom: 12px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        h1 {
+            font-size: 28px;
+            margin: 0 0 10px 0;
+            color: #2c2523;
+        }
+
+        h2 {
+            font-size: 22px;
+            margin: 24px 0 8px 0;
+            color: #2b4c59;
+        }
+
+        .subtitle {
+            font-size: 16px;
+            color: #666666;
+            margin-bottom: 20px;
+            line-height: 1.4;
+        }
+
+        /* Photos d'accueil (Grégoire petit) */
+        .teaser-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin-bottom: 24px;
+        }
+
+        .teaser-grid img {
+            width: 100%;
+            height: 220px;
+            object-fit: cover;
+            border-radius: 12px;
+            border: 3px solid #f0eae1;
+            box-sizing: border-box;
+        }
+
+        /* Boutons du Quiz */
+        .quiz-options {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-bottom: 24px;
+        }
+
+        .quiz-btn {
+            background-color: #ffffff;
+            border: 2px solid #e8e2d9;
+            border-radius: 14px;
+            padding: 14px 16px;
+            font-size: 16px;
+            font-weight: 600;
+            color: #2c2523;
+            cursor: pointer;
+            text-align: left;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+            transition: all 0.2s ease;
+        }
+
+        .quiz-btn-left {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .quiz-btn:hover {
+            border-color: #c2593f;
+            background-color: #fff8f6;
+        }
+
+        .quiz-btn.active {
+            border-color: #c2593f;
+            background-color: #c2593f;
+            color: #ffffff;
+        }
+
+        /* Badge "Bien vu !" */
+        .bien-vu-badge {
+            display: none;
+            background-color: #e6f4ea;
+            color: #1e7e34;
+            font-size: 12px;
+            font-weight: 700;
+            padding: 4px 10px;
+            border-radius: 20px;
+            white-space: nowrap;
+            flex-shrink: 0;
+        }
+
+        .quiz-btn.visited .bien-vu-badge {
+            display: inline-block;
+        }
+
+        .quiz-btn.active .bien-vu-badge {
+            background-color: #ffffff;
+            color: #c2593f;
+        }
+
+        /* Zone de révélation */
+        .reveal-card {
+            display: none;
+            background: #faf7f2;
+            border-radius: 16px;
+            padding: 16px;
+            margin-top: 15px;
+            border: 1px solid #e8e2d9;
+        }
+
+        .reveal-card.show {
+            display: block;
+        }
+
+        .reveal-header-tag {
+            display: inline-block;
+            background: #1e7e34;
+            color: #ffffff;
+            font-size: 13px;
+            font-weight: bold;
+            padding: 4px 12px;
+            border-radius: 20px;
+            margin-bottom: 12px;
+        }
+
+        .media-container {
+            width: 100%;
+            border-radius: 12px;
+            overflow: hidden;
+            background: #000000;
+            margin-bottom: 12px;
+        }
+
+        .media-container video,
+        .media-container img {
+            width: 100%;
+            max-height: 400px;
+            object-fit: contain;
+            display: block;
+        }
+
+        .extra-photo {
+            margin-top: 12px;
+            border-radius: 12px;
+            overflow: hidden;
+            border: 2px solid #e8e2d9;
+        }
+
+        .extra-photo img {
+            width: 100%;
+            max-height: 320px;
+            object-fit: cover;
+            display: block;
+        }
+
+        .reveal-text {
+            font-size: 16px;
+            font-weight: 500;
+            color: #2c2523;
+            margin: 10px 0 0 0;
+            line-height: 1.4;
+        }
+
+        /* Save the Date Final */
+        .final-cta {
+            margin-top: 32px;
+            padding-top: 24px;
+            border-top: 2px dashed #e8e2d9;
+        }
+
+        .date-box {
+            background: #fdf2ee;
+            border: 2px solid #c2593f;
+            border-radius: 16px;
+            padding: 18px;
+            margin: 16px 0;
+        }
+
+        .date-title {
+            font-size: 14px;
+            text-transform: uppercase;
+            font-weight: bold;
+            color: #c2593f;
+            letter-spacing: 1px;
+        }
+
+        .big-date {
+            font-size: 28px;
+            font-weight: 800;
+            color: #c2593f;
+            margin: 8px 0;
+        }
+
+        .date-details {
+            font-size: 15px;
+            font-weight: 500;
+            margin-bottom: 8px;
+        }
+
+        .date-surprise {
+            font-size: 14px;
+            color: #2c2523;
+            margin-bottom: 8px;
+        }
+
+        .date-deadline {
+            display: inline-block;
+            background-color: #ffffff;
+            border: 1px solid #c2593f;
+            color: #c2593f;
+            font-size: 13px;
+            font-weight: 700;
+            padding: 4px 12px;
+            border-radius: 20px;
+            margin-top: 4px;
+        }
+
+        /* Compte à rebours */
+        .countdown {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin: 18px 0;
+        }
+
+        .cd-box {
+            background: #faf7f2;
+            border: 1px solid #e8e2d9;
+            border-radius: 10px;
+            padding: 8px 12px;
+            min-width: 60px;
+        }
+
+        .cd-num {
+            font-size: 20px;
+            font-weight: bold;
+            color: #2b4c59;
+            display: block;
+        }
+
+        .cd-label {
+            font-size: 11px;
+            color: #666666;
+            text-transform: uppercase;
+        }
+
+        /* Section Pré-confirmation */
+        .rsvp-box {
+            background: #f4f8f9;
+            border: 2px solid #2b4c59;
+            border-radius: 16px;
+            padding: 18px;
+            margin: 22px 0;
+        }
+
+        .rsvp-title {
+            font-size: 16px;
+            font-weight: 700;
+            color: #2b4c59;
+            margin: 0 0 6px 0;
+        }
+
+        .rsvp-sub {
+            font-size: 14px;
+            color: #555555;
+            margin: 0 0 14px 0;
+        }
+
+        .rsvp-buttons {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 14px;
+        }
+
+        .rsvp-btn-mail {
+            background: #c2593f;
+            color: #ffffff;
+            border: none;
+            padding: 13px 24px;
+            border-radius: 10px;
+            font-size: 15px;
+            font-weight: 700;
+            cursor: pointer;
+            width: 100%;
+            max-width: 320px;
+            transition: background 0.2s ease;
+        }
+
+        .rsvp-btn-mail:hover {
+            background: #a3462f;
+        }
+
+        .whatsapp-note {
+            background: #eef9f2;
+            border: 1px solid #b7e4c7;
+            color: #1b4332;
+            border-radius: 10px;
+            padding: 10px 14px;
+            font-size: 13.5px;
+            line-height: 1.4;
+        }
+
+        /* Boutons Calendrier */
+        .cal-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .cal-btn {
+            background: #2b4c59;
+            color: #ffffff;
+            border: none;
+            padding: 12px;
+            border-radius: 10px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .cal-btn:hover {
+            background: #1d3540;
+        }
+
+        @media (max-width: 480px) {
+            .teaser-grid {
+                grid-template-columns: 1fr;
+            }
+            .teaser-grid img {
+                height: auto;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <span class="badge">Édition spéciale • 70 ans</span>
+    <h1>Vendredi 20 août, une surprise se prépare !</h1>
+    <p class="subtitle">De ses premiers sourires jusqu'à aujourd'hui, un grand cap approche...</p>
+
+    <!-- Les 2 photos de Grégoire petit (Photo 5 et Photo 6) -->
+    <div class="teaser-grid">
+        <img src="Photo 5.png" alt="Grégoire bébé">
+        <img src="Photo 6.png" alt="Grégoire petit garçon">
+    </div>
+
+    <h2>Que prépare Grégoire pour ses 70 ans ?</h2>
+    <p class="subtitle">Cliquez sur chaque proposition pour découvrir ses grands classiques...</p>
+
+    <!-- LES 4 BOUTONS DU QUIZ AVEC BADGE "BIEN VU !" -->
+    <div class="quiz-options">
+        <button class="quiz-btn" onclick="showChoice(1)">
+            <span class="quiz-btn-left">
+                <span>🛠️</span>
+                <span>Option A : Démonter un moteur ou réparer une roue</span>
+            </span>
+            <span class="bien-vu-badge">✅ Bien vu !</span>
+        </button>
+
+        <button class="quiz-btn" onclick="showChoice(2)">
+            <span class="quiz-btn-left">
+                <span>⛺</span>
+                <span>Option B : Repartir en grand camp scout</span>
+            </span>
+            <span class="bien-vu-badge">✅ Bien vu !</span>
+        </button>
+
+        <button class="quiz-btn" onclick="showChoice(3)">
+            <span class="quiz-btn-left">
+                <span>🍫</span>
+                <span>Option C : Manger tout le chocolat de la maison</span>
+            </span>
+            <span class="bien-vu-badge">✅ Bien vu !</span>
+        </button>
+
+        <button class="quiz-btn" onclick="showChoice(4)">
+            <span class="quiz-btn-left">
+                <span>😴</span>
+                <span>Option D : S'accorder une bonne sieste au soleil</span>
+            </span>
+            <span class="bien-vu-badge">✅ Bien vu !</span>
+        </button>
+    </div>
+
+    <!-- RÉSULTAT 1 : Mécanique (Vidéo + Photo 7 charrette) -->
+    <div id="reveal-1" class="reveal-card">
+        <span class="reveal-header-tag">✅ Bien vu ! Un vrai passionné</span>
+        <div class="media-container">
+            <video src="video_mecanique.mp4" poster="Photo 8.png" controls playsinline preload="none"></video>
+        </div>
+        <p class="reveal-text">🔧 <strong>Toujours les mains dans le moteur !</strong> « Je dois regarder d'un peu plus près... C'est bien ce que je pensais ! »</p>
+        <div class="extra-photo">
+            <img src="Photo 7.png" alt="Grégoire bricoleur charrette">
+        </div>
+        <p class="reveal-text">Et quand ce n'est pas une voiture, c'est la roue de la charrette !</p>
+    </div>
+
+    <!-- RÉSULTAT 2 : Scout (Photo 3b) -->
+    <div id="reveal-2" class="reveal-card">
+        <span class="reveal-header-tag">✅ Bien vu ! Toujours prêt</span>
+        <div class="media-container">
+            <img src="Photo 3b.jpg" alt="Grégoire scout">
+        </div>
+        <p class="reveal-text">⚜️ <strong>Scout un jour, scout toujours !</strong> Toujours en culotte courte, peu importe la météo.</p>
+    </div>
+
+    <!-- RÉSULTAT 3 : Chocolat (Vidéo) -->
+    <div id="reveal-3" class="reveal-card">
+        <span class="reveal-header-tag">✅ Bien vu ! Gourmand un jour, gourmand toujours</span>
+        <div class="media-container">
+            <video src="video_chocolat2.mp4" poster="Photo 2.png" controls playsinline preload="none"></video>
+        </div>
+        <p class="reveal-text">🍫 <strong>Pris en flagrant délit !</strong> « Mmm, c'est délicieux ! » À 70 ans, le chocolat reste une affaire très sérieuse.</p>
+    </div>
+
+    <!-- RÉSULTAT 4 : Sieste & Détente (Vidéo + Photo 4b plage) -->
+    <div id="reveal-4" class="reveal-card">
+        <span class="reveal-header-tag">✅ Bien vu ! Le rituel sacré</span>
+        <div class="media-container">
+            <video src="video_sieste.mp4" poster="Photo 1.png" controls playsinline preload="none"></video>
+        </div>
+        <p class="reveal-text">💤 <strong>Le secret de sa jeunesse :</strong> Une sieste quotidienne sacrée et imperturbable !</p>
+        <div class="extra-photo">
+            <img src="Photo 4b.jpg" alt="Grégoire à la plage">
+        </div>
+        <p class="reveal-text">Pour être toujours en pleine forme avec ceux qu'il aime !</p>
+    </div>
+
+    <!-- SAVE THE DATE FINAL -->
+    <div class="final-cta">
+        <p style="font-size: 18px; margin-bottom: 6px;"><strong>La vraie réponse ?</strong> Il fera tout ça à la fois...</p>
+        <p style="color: #666666; margin-top: 0;">Mais surtout, il fêtera ça avec vous !</p>
+
+        <div class="date-box">
+            <div class="date-title">🎉 SAVE THE DATE 🎉</div>
+            <div class="big-date">20 AOÛT 2027 à Vieusart</div>
+            <div class="date-details">Bloquez dès maintenant votre après-midi et votre soirée !</div>
+            <div class="date-surprise">On compte sur votre discrétion pour garder la surprise 🤫.</div>
+            <div class="date-deadline">Réponse attendue avant le 30 janvier</div>
+        </div>
+
+        <!-- Compte à rebours -->
+        <div class="countdown" id="countdown">
+            <div class="cd-box"><span class="cd-num" id="days">--</span><span class="cd-label">Jours</span></div>
+            <div class="cd-box"><span class="cd-num" id="hours">--</span><span class="cd-label">Heures</span></div>
+            <div class="cd-box"><span class="cd-num" id="mins">--</span><span class="cd-label">Min</span></div>
+            <div class="cd-box"><span class="cd-num" id="secs">--</span><span class="cd-label">Sec</span></div>
+        </div>
+
+        <!-- PRÉ-CONFIRMATION -->
+        <div class="rsvp-box">
+            <p class="rsvp-title">🙌 Je bloque la date !</p>
+            <p class="rsvp-sub">Faites-nous un petit signe en un clic pour nous dire que c'est bien noté :</p>
+            <div class="rsvp-buttons">
+                <button class="rsvp-btn-mail" onclick="confirmByEmail()">✉️ Je bloque par E-mail</button>
+            </div>
+            <div class="whatsapp-note">
+                💬 <strong>Par WhatsApp :</strong> une communauté sera créée, vous pouvez simplement répondre à ses enfants (administrateurs de la communauté).
+            </div>
+        </div>
+
+        <!-- BOUTONS CALENDRIER -->
+        <p style="font-size: 14px; font-weight: bold; color: #2b4c59; margin-bottom: 8px;">📅 Ajouter à mon agenda :</p>
+        <div class="cal-grid">
+            <button class="cal-btn" onclick="openGoogle()">Google Agenda</button>
+            <button class="cal-btn" onclick="downloadICS()">Apple / iCal</button>
+            <button class="cal-btn" onclick="openOutlook()">Outlook</button>
+            <button class="cal-btn" onclick="downloadICS()">Télécharger .ics</button>
+        </div>
+
+        <p style="font-size: 13px; color: #888888; margin-top: 20px;">Tous les détails arrivent prochainement.</p>
+    </div>
+</div>
+
+<script>
+    // =========================================================
+    // Coordonnées pour recevoir la réponse par e-mail
+    // =========================================================
+    var VOTRE_EMAIL = "surprise.gregoire20aout2027@yahoo.com";
+
+    function showChoice(index) {
+        // Mettre en pause toutes les vidéos
+        var videos = document.querySelectorAll('video');
+        for (var i = 0; i < videos.length; i++) {
+            videos[i].pause();
+        }
+
+        // Masquer toutes les cartes
+        var cards = document.querySelectorAll('.reveal-card');
+        for (var j = 0; j < cards.length; j++) {
+            cards[j].classList.remove('show');
+        }
+
+        // Retirer l'état actif des boutons
+        var btns = document.querySelectorAll('.quiz-btn');
+        for (var k = 0; k < btns.length; k++) {
+            btns[k].classList.remove('active');
+        }
+
+        // Marquer le bouton cliqué comme actif ET visité ("Bien vu !")
+        if (btns[index - 1]) {
+            btns[index - 1].classList.add('active');
+            btns[index - 1].classList.add('visited');
+        }
+
+        // Afficher la carte correspondante et défiler automatiquement vers elle
+        var selectedCard = document.getElementById('reveal-' + index);
+        if (selectedCard) {
+            selectedCard.classList.add('show');
+
+            // Défilement fluide vers la carte ouverte
+            setTimeout(function() {
+                selectedCard.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }, 100);
+
+            // Lancer la vidéo si présente
+            var video = selectedCard.querySelector('video');
+            if (video) {
+                video.currentTime = 0;
+                video.muted = false;
+                video.play().catch(function() {
+                    video.muted = true;
+                    video.play();
+                });
+            }
+        }
+    }
+
+    // Compte à rebours jusqu'au 20 août 2027 à 15h00
+    var targetDate = new Date("2027-08-20T15:00:00").getTime();
+
+    function updateCountdown() {
+        var now = new Date().getTime();
+        var diff = targetDate - now;
+
+        if (diff > 0) {
+            document.getElementById("days").innerText = Math.floor(diff / (1000 * 60 * 60 * 24));
+            document.getElementById("hours").innerText = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            document.getElementById("mins").innerText = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+            document.getElementById("secs").innerText = Math.floor((diff % (1000 * 60)) / 1000);
+        }
+    }
+    setInterval(updateCountdown, 1000);
+    updateCountdown();
+
+    // Pré-confirmation par E-mail
+    function confirmByEmail() {
+        var subject = encodeURIComponent("Save the Date - Surprise 🤫 pour les 70 ans de Grégoire (20 août 2027)");
+        var body = encodeURIComponent("Bonjour !\n\nC'est bien noté, je bloque la date du 20 août 2027 pour fêter les 70 ans de Grégoire !\n\nÀ très bientôt,\n[Votre Prénom / Nom]");
+        window.location.href = "mailto:" + VOTRE_EMAIL + "?subject=" + subject + "&body=" + body;
+    }
+
+    // Boutons Calendrier (20 août 2027 de 15h00 à 23h59)
+    var EVENT_TITLE = "70 ans de Grégoire ! 🎉";
+    var EVENT_LOCATION = "Vieusart (Brabant-Wallon)";
+    var EVENT_DESC = "Save the date pour les 70 ans de Grégoire ! Bloquez votre après-midi et votre soirée, détails à suivre.";
+
+    function openGoogle() {
+        var url = "https://calendar.google.com/calendar/render?action=TEMPLATE"
+            + "&text=" + encodeURIComponent(EVENT_TITLE)
+            + "&dates=20270820T150000/20270820T235900"
+            + "&location=" + encodeURIComponent(EVENT_LOCATION)
+            + "&details=" + encodeURIComponent(EVENT_DESC);
+        window.open(url, '_blank');
+    }
+
+    function openOutlook() {
+        var url = "https://outlook.live.com/calendar/0/deeplink/compose?path=%2Fcalendar%2Faction%2Fcompose&rru=addevent"
+            + "&subject=" + encodeURIComponent(EVENT_TITLE)
+            + "&startdt=2027-08-20T15:00:00&enddt=2027-08-20T23:59:00"
+            + "&location=" + encodeURIComponent(EVENT_LOCATION)
+            + "&body=" + encodeURIComponent(EVENT_DESC);
+        window.open(url, '_blank');
+    }
+
+    function downloadICS() {
+        var ics = "BEGIN:VCALENDAR\r\n"
+            + "VERSION:2.0\r\n"
+            + "PRODID:-//Save the Date//70 ans Gregoire//FR\r\n"
+            + "BEGIN:VEVENT\r\n"
+            + "UID:70ans-gregoire-20270820@savethedate\r\n"
+            + "DTSTAMP:20261117T120000Z\r\n"
+            + "SUMMARY:" + EVENT_TITLE + "\r\n"
+            + "LOCATION:" + EVENT_LOCATION + "\r\n"
+            + "DESCRIPTION:" + EVENT_DESC + "\r\n"
+            + "DTSTART:20270820T150000\r\n"
+            + "DTEND:20270820T235900\r\n"
+            + "END:VEVENT\r\n"
+            + "END:VCALENDAR";
+        var blob = new Blob([ics], { type: "text/calendar;charset=utf-8" });
+        var link = document.createElement("a");
+        link.href = window.URL.createObjectURL(blob);
+        link.setAttribute("download", "70_ans_gregoire.ics");
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+    }
+</script>
+
+</body>
+</html>
